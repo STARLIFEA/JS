@@ -7,18 +7,19 @@ const TILE_HEIGHT = 64;
 
 class Game {
   layers = [
-    [
-      1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-      1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-      1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-      1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-      1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-      1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-      1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-      1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      [
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 
-    ]
-  ];
+      ]
+    ];
+
 
   constructor(ctx) {
     console.log("init");
@@ -52,7 +53,7 @@ class Game {
     return d;
   };
 
-  pdraw = () => {
+  user = () => {
 
       this.ctx.drawImage(
         this.images.user0,
@@ -69,7 +70,7 @@ class Game {
 
   }
 
-  draw = () => {
+  map = () => {
     console.log("draw");
 
     const cols = CANVAS_WIDTH / TILE_WIDTH;
@@ -79,9 +80,9 @@ class Game {
       const layer = this.layers[i];
       for (var j = 0; j < rows; j++) {
         for (var k = 0; k < cols; k++) {
-          const imageType = layer[j * cols + k];
-          console.log(imageType);
-          this.ctx.drawImage(
+            const imageType = layer[j * cols + k];
+            console.log(imageType);
+            this.ctx.drawImage(
             this.images[imageType],
             0,
             0,
@@ -91,10 +92,10 @@ class Game {
             j * TILE_HEIGHT,
             TILE_WIDTH,
             TILE_HEIGHT
-          );
-        }
+                  );
+              }
+          }
       }
-    }
   };
 }
 class App extends Component {
@@ -107,8 +108,8 @@ class App extends Component {
     this.game = new Game(ctx);
 
     await this.game.init();
-    this.game.draw();
-    this.game.pdraw();
+    this.game.map();
+    this.game.user();
 
   };
 
@@ -135,3 +136,4 @@ class App extends Component {
 }
 
 export default App;
+
