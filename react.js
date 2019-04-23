@@ -6,6 +6,7 @@ const TILE_WIDTH = 64;
 const TILE_HEIGHT = 64;
 
 class Game {
+  // HARİTA
   layers = [
       [
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -24,10 +25,15 @@ class Game {
   constructor(ctx) {
     console.log("init");
     this.ctx = ctx;
+    this.x = 300;
+    this.y = 300;
+    this.dirx = 0;
+    this.diry = 0;
+
 
   }
 
-
+// resim alma
   init = async () => {
     console.log("load");
     const tile0 = await this.loadImage("./assets/layers/0.png");
@@ -38,7 +44,52 @@ class Game {
       0: tile0,
       1: tile1,
     };
+
+    window.addEventListener('keydown',this.onKeyDown);
+    window.addEventListener('keyup',this.onKeyUp);
+
   };
+
+    onKeyDown  = event => {
+        const keyCode = event.keyCode;
+        //sol
+        if (keyCode === 37){
+          console.log('sol');
+          this.dirx = -1;
+        }
+        //sağ
+        if (keyCode === 39){
+            this.dirx = 1;
+        }
+        //yukarı
+        if (keyCode === 38){
+            this.diry = -1;
+        }
+        //ağağı
+        if (keyCode === 40){
+            this.diry = 1;
+        }
+
+
+
+    };
+    onKeyUp  = event => {
+        const keyCode = event.keyCode;
+
+        if(keyCode === 37 || keyCode === 39){
+          this.dirx = 0;
+
+        }
+        if(keyCode === 38 || keyCode === 40){
+          this.diry = 0;
+        }
+
+
+    };
+
+
+
+  //resim alma foksiyonu
   loadImage = src => {
     var img = new Image();
     var d = new Promise(function(resolve, reject) {
@@ -52,7 +103,16 @@ class Game {
     img.src = src;
     return d;
   };
+  update = () => {
 
+    this.x+=this.dirx*5;
+    this.y+=this.diry*5;
+
+
+  };
+
+
+// kulanıcı
   user = () => {
 
       this.ctx.drawImage(
@@ -61,15 +121,15 @@ class Game {
         0,
         TILE_WIDTH,
         TILE_HEIGHT,
-       TILE_WIDTH,
-        TILE_HEIGHT,
+       this.x,
+        this.y,
         TILE_WIDTH,
         TILE_HEIGHT
       );
 
 
   }
-
+//harita
   map = () => {
     console.log("draw");
 
@@ -99,20 +159,30 @@ class Game {
   };
 }
 class App extends Component {
-  constructor(props) {
+  constructor(props,game) {
     super(props);
     this.canvasRef = React.createRef();
+    this.game=game;
   }
   start = async () => {
+
     const ctx = this.canvasRef.current.getContext("2d");
     this.game = new Game(ctx);
-
     await this.game.init();
+
+    this.loop();
+  };
+  loop = () => {
+  requestAnimationFrame ( () => {
+
     this.game.map();
     this.game.user();
+      this.game.update();
 
-  };
+          this.loop();
 
+  });
+};
   render() {
     return (
       <div
@@ -136,4 +206,3 @@ class App extends Component {
 }
 
 export default App;
-
